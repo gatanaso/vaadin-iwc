@@ -22,7 +22,7 @@ public class Iwc extends AbstractJavaScriptExtension {
 	public void test() {
 		callFunction("test");
 	}
-	
+
 	/**
 	 * Set the value of the data reference.
 	 * 
@@ -30,5 +30,12 @@ public class Iwc extends AbstractJavaScriptExtension {
 	 */
 	public void setData(String data) {
 		callFunction("setData", data);
+	}
+
+	/**
+	 * Adds a watch on the data reference.
+	 */	
+	public void addDataWatch() {
+		callFunction("addDataWatch");
 	}
 }

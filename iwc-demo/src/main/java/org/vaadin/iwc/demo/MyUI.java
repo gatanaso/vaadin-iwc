@@ -8,8 +8,10 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -32,13 +34,23 @@ public class MyUI extends UI {
 		Button test = new Button("Test IWC connection");
 		test.addClickListener(event -> iwc.test());
 		
+		Button addDataWatch = new Button("Add data watch");
+		addDataWatch.addClickListener(event -> iwc.addDataWatch());
+
+		HorizontalLayout btnContainer = new HorizontalLayout(test, addDataWatch);
+		btnContainer.setSpacing(true);		
+		
 		TextField dataInput = new TextField();
-		Button setData = new Button("Set data");
-		setData.addClickListener(event -> iwc.setData(dataInput.getValue()));
-		HorizontalLayout dataContainer = new HorizontalLayout(dataInput, setData);
+		Button setDataBtn = new Button("Set data");
+		setDataBtn.addClickListener(event -> iwc.setData(dataInput.getValue()));
+		HorizontalLayout dataContainer = new HorizontalLayout(dataInput, setDataBtn);
 		dataContainer.setSpacing(true);
 
-		VerticalLayout content = new VerticalLayout(test, dataContainer);
+		Label dataValueLbl = new Label();
+		dataValueLbl.setContentMode(ContentMode.PREFORMATTED);
+		dataValueLbl.addStyleName("data-reference-value");
+
+		VerticalLayout content = new VerticalLayout(btnContainer, dataContainer, dataValueLbl);
 		content.setSpacing(true);
 		setContent(content);
 	}
