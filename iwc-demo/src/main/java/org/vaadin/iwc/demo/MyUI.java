@@ -31,26 +31,34 @@ public class MyUI extends UI {
 		Iwc iwc = new Iwc();
 		this.addExtension(iwc);
 
-		Button test = new Button("Test IWC connection");
-		test.addClickListener(event -> iwc.test());
-		
-		Button addDataWatch = new Button("Add data watch");
-		addDataWatch.addClickListener(event -> iwc.addDataWatch());
+		Button connect = new Button("connect");
+		connect.addClickListener(event -> iwc.connect());
 
-		HorizontalLayout btnContainer = new HorizontalLayout(test, addDataWatch);
-		btnContainer.setSpacing(true);		
-		
+		Label dataReference = new Label("Data reference path: /vaadin/iwc/data");
+		HorizontalLayout infoContainer = new HorizontalLayout(dataReference, connect);
+		infoContainer.setSpacing(true);
+
+		// Data API examples
+		Button watch = new Button("watch");
+		watch.addClickListener(event -> iwc.watch());
+
 		TextField dataInput = new TextField();
-		Button setDataBtn = new Button("Set data");
-		setDataBtn.addClickListener(event -> iwc.setData(dataInput.getValue()));
-		HorizontalLayout dataContainer = new HorizontalLayout(dataInput, setDataBtn);
-		dataContainer.setSpacing(true);
+		Button setDataBtn = new Button("set");
+		setDataBtn.addClickListener(event -> iwc.set(dataInput.getValue()));
+		HorizontalLayout setAction = new HorizontalLayout(dataInput, setDataBtn);
+		setAction.setSpacing(true);
 
-		Label dataValueLbl = new Label();
-		dataValueLbl.setContentMode(ContentMode.PREFORMATTED);
-		dataValueLbl.addStyleName("data-reference-value");
+		Button getData = new Button("get");
+		getData.addClickListener(event -> iwc.get());
 
-		VerticalLayout content = new VerticalLayout(btnContainer, dataContainer, dataValueLbl);
+		HorizontalLayout dataApiActions = new HorizontalLayout(watch, setAction, getData);
+		dataApiActions.setSpacing(true);
+
+		Label dataApiResultLbl = new Label();
+		dataApiResultLbl.setContentMode(ContentMode.PREFORMATTED);
+		dataApiResultLbl.addStyleName("data-reference-value");
+
+		VerticalLayout content = new VerticalLayout(infoContainer, dataApiActions, dataApiResultLbl);
 		content.setSpacing(true);
 		setContent(content);
 	}

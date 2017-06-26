@@ -9,33 +9,54 @@ import com.vaadin.server.AbstractJavaScriptExtension;
  * @author gatanaso
  *
  */
-@JavaScript({
-	"https://ozoneplatform.github.io/ozp-iwc/js/ozpIwc-client.js",
-	"vaadin://iwc/iwc-connector.js"})
+@JavaScript({ "https://ozoneplatform.github.io/ozp-iwc/js/ozpIwc-client.js", "vaadin://iwc/iwc-connector.js" })
 public class Iwc extends AbstractJavaScriptExtension {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Test the IWC connection.
+	 * Connects to the IWC bus.
 	 */
-	public void test() {
-		callFunction("test");
+	public void connect() {
+		callFunction("connect");
+	}
+
+	/**
+	 * Disconnects to the IWC bus.
+	 */
+	public void disconnect() {
+		callFunction("disconnect");
 	}
 
 	/**
 	 * Set the value of the data reference.
 	 * 
-	 * @param data the value to set.
+	 * @param data
+	 *            the value to set.
 	 */
-	public void setData(String data) {
-		callFunction("setData", data);
+	public void set(String data) {
+		callFunction("set", data);
+	}
+
+	/**
+	 * Gets the value of the data reference.
+	 */
+	public void get() {
+		callFunction("get");
 	}
 
 	/**
 	 * Adds a watch on the data reference.
-	 */	
-	public void addDataWatch() {
-		callFunction("addDataWatch");
+	 */
+	public void watch() {
+		callFunction("watch");
 	}
+
+	/**
+	 * Adds a watch on the data reference.
+	 */
+	public void unwatch() {
+		callFunction("unwatch");
+	}
+
 }
