@@ -1,32 +1,15 @@
 'use strict';
 /**
- * Iwc frontend wrapper.
+ * Iwc Data connector.
  */
-window.org_vaadin_iwc_Iwc = function() {
+window.org_vaadin_iwc_IwcData = function() {
 
   var iwc = new ozpIwc.Client("https://ozoneplatform.github.io/ozp-iwc");
-  var dataRef = new iwc.data.Reference("/vaadin/iwc/data");
 
-  /**
-	 * Connect to the IWC bus.
-	 */
-  this.connect = function() {
-    iwc.connect().then(function() {
-      console.log("IWC Client connected with address: ", iwc.address);
-    }).catch(function(err) {
-      console.error("IWC Client failed to connect: ", err);
-    });
+  var config = {
+    fullResponse: true
   };
-
-  /**
-	 * Disconnect from the the IWC bus.
-	 */
-  this.disconnect = function() {
-    iwc.connect().then(function() {
-      console.log("IWC Client disconnected");
-      iwc.disconnect();
-    });
-  };
+  var dataRef = new iwc.data.Reference("/vaadin/iwc/data", config);
 
   /**
 	 * Set the value of the data reference.
@@ -47,7 +30,7 @@ window.org_vaadin_iwc_Iwc = function() {
     dataRef.get().then(function(data) {
       console.log("Data reference value: ", data);
       var dataLabel = document.getElementsByClassName("data-reference-value")[0];
-      dataLabel.textContent = data;
+      dataLabel.textContent = JSON.stringify(data, null, 2);;
     }).catch(function(err) {
       console.log("Could not retrieve data reference value. Reason: ", err);
     });

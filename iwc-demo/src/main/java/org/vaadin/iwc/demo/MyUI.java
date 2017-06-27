@@ -2,7 +2,7 @@ package org.vaadin.iwc.demo;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.vaadin.iwc.Iwc;
+import org.vaadin.iwc.IwcData;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -28,37 +28,34 @@ public class MyUI extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 
-		Iwc iwc = new Iwc();
-		this.addExtension(iwc);
-
-		Button connect = new Button("connect");
-		connect.addClickListener(event -> iwc.connect());
-
-		Label dataReference = new Label("Data reference path: /vaadin/iwc/data");
-		HorizontalLayout infoContainer = new HorizontalLayout(dataReference, connect);
-		infoContainer.setSpacing(true);
+		IwcData iwcData = new IwcData();
+		this.addExtension(iwcData);
 
 		// Data API examples
 		Button watch = new Button("watch");
-		watch.addClickListener(event -> iwc.watch());
+		watch.addClickListener(event -> iwcData.watch());
+
+		Button unwatch = new Button("unwatch");
+		unwatch.addClickListener(event -> iwcData.unwatch());
 
 		TextField dataInput = new TextField();
 		Button setDataBtn = new Button("set");
-		setDataBtn.addClickListener(event -> iwc.set(dataInput.getValue()));
+		setDataBtn.addClickListener(event -> iwcData.set(dataInput.getValue()));
 		HorizontalLayout setAction = new HorizontalLayout(dataInput, setDataBtn);
 		setAction.setSpacing(true);
 
 		Button getData = new Button("get");
-		getData.addClickListener(event -> iwc.get());
+		getData.addClickListener(event -> iwcData.get());
 
-		HorizontalLayout dataApiActions = new HorizontalLayout(watch, setAction, getData);
+		HorizontalLayout dataApiActions = new HorizontalLayout(watch, unwatch, setAction, getData);
 		dataApiActions.setSpacing(true);
 
 		Label dataApiResultLbl = new Label();
 		dataApiResultLbl.setContentMode(ContentMode.PREFORMATTED);
 		dataApiResultLbl.addStyleName("data-reference-value");
 
-		VerticalLayout content = new VerticalLayout(infoContainer, dataApiActions, dataApiResultLbl);
+		Label dataReference = new Label("Data reference path: /vaadin/iwc/data");
+		VerticalLayout content = new VerticalLayout(dataReference, dataApiActions, dataApiResultLbl);
 		content.setSpacing(true);
 		setContent(content);
 	}

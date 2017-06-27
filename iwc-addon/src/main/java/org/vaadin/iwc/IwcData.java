@@ -4,29 +4,16 @@ import com.vaadin.annotations.JavaScript;
 import com.vaadin.server.AbstractJavaScriptExtension;
 
 /**
- * The IWC Vaadin JavaScript Extension.
+ * The IWC Data Vaadin JavaScript Extension.
+ * <p>
+ * Exposes the IWC Data API.
  * 
  * @author gatanaso
- *
  */
-@JavaScript({ "https://ozoneplatform.github.io/ozp-iwc/js/ozpIwc-client.js", "vaadin://iwc/iwc-connector.js" })
-public class Iwc extends AbstractJavaScriptExtension {
+@JavaScript({ "https://ozoneplatform.github.io/ozp-iwc/js/ozpIwc-client.js", "vaadin://iwc/iwc-data-connector.js" })
+public class IwcData extends AbstractJavaScriptExtension {
 
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Connects to the IWC bus.
-	 */
-	public void connect() {
-		callFunction("connect");
-	}
-
-	/**
-	 * Disconnects to the IWC bus.
-	 */
-	public void disconnect() {
-		callFunction("disconnect");
-	}
 
 	/**
 	 * Set the value of the data reference.
@@ -39,7 +26,7 @@ public class Iwc extends AbstractJavaScriptExtension {
 	}
 
 	/**
-	 * Gets the value of the data reference.
+	 * Logs to the browser console the value of the data reference.
 	 */
 	public void get() {
 		callFunction("get");
