@@ -19,7 +19,7 @@ window.org_vaadin_iwc_IwcData = function() {
   this.set = function(data) {
     console.log("Setting data reference value: " + data);
     dataRef.set(data).catch(function(err) {
-      console.log("Error occurred while setting data value: ", err);
+      console.error("Error occurred while setting data value: ", err);
     });
   };
 
@@ -30,9 +30,9 @@ window.org_vaadin_iwc_IwcData = function() {
     dataRef.get().then(function(data) {
       console.log("Data reference value: ", data);
       var dataLabel = document.getElementsByClassName("data-reference-value")[0];
-      dataLabel.textContent = JSON.stringify(data, null, 2);;
+      dataLabel.textContent = JSON.stringify(data, null, 2);
     }).catch(function(err) {
-      console.log("Could not retrieve data reference value. Reason: ", err);
+      console.error("Could not retrieve data reference value. Reason: ", err);
     });
   };
 
