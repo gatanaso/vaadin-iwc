@@ -42,13 +42,14 @@ public class IwcDataDemoComponent extends VerticalLayout {
 		HorizontalLayout dataApiActions = new HorizontalLayout(watch, unwatch, setAction, getData);
 		dataApiActions.setSpacing(true);
 
-		Label dataApiResultLbl = new Label();
-		dataApiResultLbl.setContentMode(ContentMode.PREFORMATTED);
-		dataApiResultLbl.addStyleName(DATA_VALUE_LABEL_CLASS);
+		Label infoLbl = new Label();
+		infoLbl.setContentMode(ContentMode.PREFORMATTED);
+		infoLbl.addStyleName(DATA_VALUE_LABEL_CLASS);
+		infoLbl.setWidth(80, Unit.PERCENTAGE);
 
 		Label dataReference = new Label("Data reference path: /vaadin/iwc/data");
 		
-		addComponents(dataReference, dataApiActions, dataApiResultLbl);
+		addComponents(dataReference, dataApiActions, infoLbl);
 		setSpacing(true);
 	}
 }

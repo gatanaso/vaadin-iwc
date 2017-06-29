@@ -6,6 +6,7 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -32,16 +33,30 @@ public class IwcIntentsDemoComponent extends VerticalLayout {
 		Button broadcastBtn = new Button("broadcast");
 		broadcastBtn.addClickListener(event -> iwcIntents.broadcast());
 
-		HorizontalLayout dataApiActions = new HorizontalLayout(registerBtn, invokeBtn, broadcastBtn);
+		Button unregisterBtn = new Button("unregister");
+		unregisterBtn.addClickListener(event -> iwcIntents.unregister());
+
+		TextField dataInput = new TextField();
+		Button setDataBtn = new Button("set");
+		setDataBtn.addClickListener(event -> iwcIntents.set(dataInput.getValue()));
+		HorizontalLayout setAction = new HorizontalLayout(dataInput, setDataBtn);
+		setAction.setSpacing(true);
+
+		Button getData = new Button("get");
+		getData.addClickListener(event -> iwcIntents.get());
+
+		HorizontalLayout dataApiActions = new HorizontalLayout(registerBtn, invokeBtn, broadcastBtn, unregisterBtn,
+				getData);
 		dataApiActions.setSpacing(true);
 
-		Label dataApiResultLbl = new Label();
-		dataApiResultLbl.setContentMode(ContentMode.PREFORMATTED);
-		dataApiResultLbl.addStyleName(INTENTS_VALUE_LABEL_CLASS);
+		Label infoLbl = new Label();
+		infoLbl.setContentMode(ContentMode.PREFORMATTED);
+		infoLbl.addStyleName(INTENTS_VALUE_LABEL_CLASS);
+		infoLbl.setWidth(80, Unit.PERCENTAGE);
 
-		Label dataReference = new Label("Intents reference path: /vaadin/iwc/intents");
+		Label intentsReference = new Label("Intents reference path: /vaadin/iwc/intents");
 
-		addComponents(dataReference, dataApiActions, dataApiResultLbl);
+		addComponents(intentsReference, dataApiActions, infoLbl);
 		setSpacing(true);
 	}
 }

@@ -16,11 +16,35 @@ public class IwcIntents extends AbstractJavaScriptExtension {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Set the value of the data reference.
+	 * 
+	 * @param data
+	 *            the value to set.
+	 */
+	public void set(String data) {
+		callFunction("set", data);
+	}
+
+	/**
+	 * Logs to the browser console the value of the data reference.
+	 */
+	public void get() {
+		callFunction("get");
+	}
+
+	/**
 	 * Registers the application to handle and IWC Intent.
 	 */
 	public void register() {
 		callFunction("register");
 	}
+	
+	/**
+	 * Unregisters the application to handle and IWC Intent.
+	 */
+	public void unregister() {
+		callFunction("unregister");
+	}	
 
 	/**
 	 * Invokes an action.
