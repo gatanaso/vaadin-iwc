@@ -6,7 +6,6 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -35,12 +34,6 @@ public class IwcIntentsDemoComponent extends VerticalLayout {
 
 		Button unregisterBtn = new Button("unregister");
 		unregisterBtn.addClickListener(event -> iwcIntents.unregister());
-
-		TextField dataInput = new TextField();
-		Button setDataBtn = new Button("set");
-		setDataBtn.addClickListener(event -> iwcIntents.set(dataInput.getValue()));
-		HorizontalLayout setAction = new HorizontalLayout(dataInput, setDataBtn);
-		setAction.setSpacing(true);
 
 		Button getData = new Button("get");
 		getData.addClickListener(event -> iwcIntents.get());
