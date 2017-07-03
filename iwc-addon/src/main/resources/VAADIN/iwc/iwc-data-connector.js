@@ -4,12 +4,18 @@
  */
 window.org_vaadin_iwc_IwcData = function() {
 
+  var connector = this;
   var iwc = new ozpIwc.Client("https://ozoneplatform.github.io/ozp-iwc");
+  var dataRef;
 
-  var config = {
-    fullResponse: true
+  // Handle changes from the server-side
+  this.onStateChange = function() {
+    var dateRefeferenceEndpoint = this.getState().path;
+    if (dateRefeferenceEndpoint) {
+      console.log('Path set from server: ', dateRefeferenceEndpoint);
+      dataRef = new iwc.data.Reference(dateRefeferenceEndpoint, {fullResponse: true});
+    }
   };
-  var dataRef = new iwc.data.Reference("/vaadin/iwc/data", config);
 
   /**
 	 * Set the value of the data reference.
@@ -28,9 +34,11 @@ window.org_vaadin_iwc_IwcData = function() {
 	 */
   this.get = function() {
     dataRef.get().then(function(data) {
+      // execute server callback
+      connector.getCallback(data);
+
       console.log("Data reference value: ", data);
-      var dataLabel = document.getElementsByClassName("data-reference-value")[0];
-      dataLabel.textContent = JSON.stringify(data, null, 2);
+      printInfoMessageToUI(data);
     }).catch(function(err) {
       console.error("Could not retrieve data reference value. Reason: ", err);
     });
@@ -69,8 +77,13 @@ window.org_vaadin_iwc_IwcData = function() {
     if (change.deleted) {
       done(); // unwatch if deleted
     }
-    var dataLabel = document.getElementsByClassName("data-reference-value")[0];
-    dataLabel.textContent = JSON.stringify(change, null, 2);
+    // execute server callback
+    connector.watchCallback(change);
+    printInfoMessageToUI(change);
   };
 
+  var printInfoMessageToUI = function(data) {
+    var dataLabel = document.getElementsByClassName("data-reference-value")[0];
+    dataLabel.textContent = JSON.stringify(data, null, 2);
+  }
 }

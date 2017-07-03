@@ -17,11 +17,16 @@ import com.vaadin.ui.VerticalLayout;
 public class IwcDataDemoComponent extends VerticalLayout {
 
 	private static final long serialVersionUID = 1L;
-	private static final String DATA_VALUE_LABEL_CLASS = "data-reference-value";
 
+	private static final String DATA_PATH = "/vaadin/iwc/data";
+	private static final String DATA_VALUE_LABEL_CLASS = "data-reference-value";
+	
 	public IwcDataDemoComponent() {
 
 		IwcData iwcData = new IwcData();
+		iwcData.setPath(DATA_PATH);
+		iwcData.registerGetCallback(this::getCallback);
+		iwcData.registerWatchCallback(this::watchCallback);
 		addExtension(iwcData);
 
 		Button watch = new Button("watch");
@@ -41,15 +46,22 @@ public class IwcDataDemoComponent extends VerticalLayout {
 
 		HorizontalLayout dataApiActions = new HorizontalLayout(watch, unwatch, setAction, getData);
 		dataApiActions.setSpacing(true);
-
+		
 		Label infoLbl = new Label();
 		infoLbl.setContentMode(ContentMode.PREFORMATTED);
 		infoLbl.addStyleName(DATA_VALUE_LABEL_CLASS);
 		infoLbl.setWidth(80, Unit.PERCENTAGE);
 
-		Label dataReference = new Label("Data reference path: /vaadin/iwc/data");
-		
+		Label dataReference = new Label("Data reference path: " + DATA_PATH);
 		addComponents(dataReference, dataApiActions, infoLbl);
 		setSpacing(true);
+	}
+	
+	private void getCallback(String value) {
+		System.out.println("get() method return value: " + value);
+	}
+	
+	private void watchCallback(String value) {
+		System.out.println("watch() method return value: " + value);
 	}
 }
