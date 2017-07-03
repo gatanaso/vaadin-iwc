@@ -4,20 +4,33 @@
  */
 window.org_vaadin_iwc_IwcIntents = function() {
 
+  var connector = this;
   var iwc = new ozpIwc.Client("https://ozoneplatform.github.io/ozp-iwc");
 
-  var intentsEndpoint = "/vaadin/iwc/intents";
-  var baseRef = new iwc.intents.Reference(intentsEndpoint, {fullResponse: true});
-  var vaadinAppIntentsRef = new iwc.intents.Reference(intentsEndpoint + "/vaadin.iwc.extension", {fullResponse: true});
+  var intentsEndpoint;
+  var baseRef;
+  var vaadinAppIntentsRef;
+
+  // Handle changes from the server-side
+  this.onStateChange = function() {
+    var intentsEndpoint = this.getState().path;
+    if (intentsEndpoint) {
+      console.log('Path set from server: ', intentsEndpoint);
+      baseRef = new iwc.intents.Reference(intentsEndpoint, {fullResponse: true});
+      vaadinAppIntentsRef = new iwc.intents.Reference(intentsEndpoint + "/vaadin.iwc.extension", {fullResponse: true});
+    }
+  };
 
   /**
 	 * Gets the value of the intents reference.
 	 */
   this.get = function() {
     baseRef.get().then(function(data) {
+      // execute server callback
+      connector.getCallback(data);
+
       console.log("Intents reference: ", data);
-      var infoLabel = document.getElementsByClassName("intents-reference-value")[0];
-      infoLabel.textContent = JSON.stringify(data, null, 2);
+      printInfoMessageToUI(data);
     }).catch(function(err) {
       console.error("Could not retrieve data reference value. Reason: ", err);
     });
@@ -29,9 +42,11 @@ window.org_vaadin_iwc_IwcIntents = function() {
   };
 
   var onInvoke = function(payload) {
+    // execute server callback
+    connector.invocationHandler(payload);
+
     console.log('Handling IWC Intent: ', payload);
-    var infoLabel = document.getElementsByClassName("intents-reference-value")[0];
-    infoLabel.textContent = "Handling IWC Intent: " + JSON.stringify(payload);
+    printInfoMessageToUI(payload);
     return "IWC intent handled from Vaadin app";
   };
 
@@ -41,8 +56,7 @@ window.org_vaadin_iwc_IwcIntents = function() {
   this.register = function() {
     vaadinAppIntentsRef.register(config, onInvoke).then(function(resolution) {
       if ("ok" === resolution.response) {
-        var infoLabel = document.getElementsByClassName("intents-reference-value")[0];
-        infoLabel.textContent = "Vaadin app intent handler: " + JSON.stringify(resolution.entity, null, 2);
+        printInfoMessageToUI(resolution.entity);
       } else {
         console.error("Could not register for intent");
       }
@@ -74,4 +88,8 @@ window.org_vaadin_iwc_IwcIntents = function() {
     });
   };
 
+  var printInfoMessageToUI = function(data) {
+    var infoLabel = document.getElementsByClassName("intents-reference-value")[0];
+    infoLabel.textContent = JSON.stringify(data, null, 2);
+  }
 }

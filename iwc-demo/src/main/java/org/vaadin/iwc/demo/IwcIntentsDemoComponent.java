@@ -16,11 +16,16 @@ import com.vaadin.ui.VerticalLayout;
 public class IwcIntentsDemoComponent extends VerticalLayout {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final String INTENTS_PATH = "/vaadin/iwc/intents";
 	private static final String INTENTS_VALUE_LABEL_CLASS = "intents-reference-value";
 
 	public IwcIntentsDemoComponent() {
 
 		IwcIntents iwcIntents = new IwcIntents();
+		iwcIntents.setPath(INTENTS_PATH);
+		iwcIntents.registerGetCallback(this::getCallback);
+		iwcIntents.setInvocationHandler(this::invocationHandler);
 		addExtension(iwcIntents);
 
 		Button registerBtn = new Button("register");
@@ -32,13 +37,10 @@ public class IwcIntentsDemoComponent extends VerticalLayout {
 		Button broadcastBtn = new Button("broadcast");
 		broadcastBtn.addClickListener(event -> iwcIntents.broadcast());
 
-		Button unregisterBtn = new Button("unregister");
-		unregisterBtn.addClickListener(event -> iwcIntents.unregister());
-
 		Button getData = new Button("get");
 		getData.addClickListener(event -> iwcIntents.get());
 
-		HorizontalLayout dataApiActions = new HorizontalLayout(registerBtn, invokeBtn, broadcastBtn, unregisterBtn,
+		HorizontalLayout dataApiActions = new HorizontalLayout(registerBtn, invokeBtn, broadcastBtn,
 				getData);
 		dataApiActions.setSpacing(true);
 
@@ -47,9 +49,17 @@ public class IwcIntentsDemoComponent extends VerticalLayout {
 		infoLbl.addStyleName(INTENTS_VALUE_LABEL_CLASS);
 		infoLbl.setWidth(80, Unit.PERCENTAGE);
 
-		Label intentsReference = new Label("Intents reference path: /vaadin/iwc/intents");
+		Label intentsReference = new Label("Intents reference path: " + INTENTS_PATH);
 
 		addComponents(intentsReference, dataApiActions, infoLbl);
 		setSpacing(true);
 	}
+	
+	private void getCallback(String value) {
+		System.out.println("get() method return value: " + value);
+	}
+	
+	private void invocationHandler(String value) {
+		System.out.println("application inovked with paylaod: " + value);
+	}	
 }
