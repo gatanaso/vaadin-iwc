@@ -24,6 +24,8 @@ public class IwcIntentsDemoComponent extends VerticalLayout {
 
 		IwcIntents iwcIntents = new IwcIntents();
 		iwcIntents.setPath(INTENTS_PATH);
+		iwcIntents.setLabel("Vaadin Application");
+		iwcIntents.setIconUrl("https://vaadin.com/documents/10187/10609024/symbol-preview/d23e77b1-6efd-4bc6-b77c-ffefdb108674?t=1437651445828");
 		iwcIntents.registerGetCallback(this::getCallback);
 		iwcIntents.setInvocationHandler(this::invocationHandler);
 		addExtension(iwcIntents);

@@ -11,14 +11,31 @@ window.org_vaadin_iwc_IwcIntents = function() {
   var baseRef;
   var vaadinAppIntentsRef;
 
+  // default config
+  var config = {
+    "label": "Vaadin Intents Extension"
+  };
+
   // Handle changes from the server-side
   this.onStateChange = function() {
+
     var intentsEndpoint = this.getState().path;
     if (intentsEndpoint) {
       console.log('Path set from server: ', intentsEndpoint);
       baseRef = new iwc.intents.Reference(intentsEndpoint, {fullResponse: true});
       vaadinAppIntentsRef = new iwc.intents.Reference(intentsEndpoint + "/vaadin.iwc.extension", {fullResponse: true});
     }
+
+    var appLabel = this.getState().label;
+    if (appLabel) {
+      config["label"] = appLabel;
+    }
+
+    var appIcon = this.getState().iconUrl;
+    if (appIcon) {
+      config["icon"] = appIcon;
+    }
+
   };
 
   /**
@@ -34,11 +51,6 @@ window.org_vaadin_iwc_IwcIntents = function() {
     }).catch(function(err) {
       console.error("Could not retrieve data reference value. Reason: ", err);
     });
-  };
-
-  var config = {
-    "label": "Vaadin Application",
-    "icon": "https://vaadin.com/documents/10187/10609024/symbol-preview/d23e77b1-6efd-4bc6-b77c-ffefdb108674?t=1437651445828"
   };
 
   var onInvoke = function(payload) {

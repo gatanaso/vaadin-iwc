@@ -13,4 +13,6 @@ public class IwcIntentsState extends JavaScriptExtensionState {
 	private static final long serialVersionUID = 1L;
 
 	public String path;
+	public String label;
+	public String iconUrl;
 }

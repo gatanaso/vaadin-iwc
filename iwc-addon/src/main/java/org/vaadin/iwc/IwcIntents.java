@@ -48,7 +48,7 @@ public class IwcIntents extends AbstractJavaScriptExtension {
 	}
 
 	/**
-	 * Gets the value of the data reference.
+	 * Gathers the node with the specific key
 	 * <p>
 	 * The response from the client-side is sent back when the value becomes
 	 * available. To use this value on the server-side a callback has to be
@@ -99,6 +99,28 @@ public class IwcIntents extends AbstractJavaScriptExtension {
 	 */
 	public void setPath(String path) {
 		getState().path = path;
+	}
+	
+	/**
+	 * Sets the widget handler label.
+	 * <p>
+	 * A short string noting the widget handling the intent (typically the widget title).
+	 * 
+	 * @param label the label to set.
+	 */
+	public void setLabel(String label) {
+		getState().label = label;
+	}
+	
+	/**
+	 * Set the icon url.
+	 * <p>
+	 * A url path to a icon to use for the widget.
+	 * 
+	 * @param iconUrl the icon url to set.
+	 */
+	public void setIconUrl(String iconUrl) {
+		getState().iconUrl = iconUrl;
 	}
 
 	/**
