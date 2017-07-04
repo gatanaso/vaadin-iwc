@@ -21,7 +21,9 @@ public class IwcData extends AbstractJavaScriptExtension {
 	private static final long serialVersionUID = 1L;
 
 	private Consumer<String> getCallback;
+	private Consumer<String> bulkGetCallback;
 	private Consumer<String> watchCallback;
+	private Consumer<String> listCallback;
 
 	@SuppressWarnings("serial")
 	public IwcData() {
@@ -35,7 +37,17 @@ public class IwcData extends AbstractJavaScriptExtension {
 				}
 			}
 		});
-		
+
+		addFunction("bulkGetCallback", new JavaScriptFunction() {
+			@Override
+			public void call(JsonArray arguments) {
+				if (bulkGetCallback != null) {
+					// handle client-side response
+					bulkGetCallback.accept(arguments.toJson());
+				}
+			}
+		});
+
 		addFunction("watchCallback", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
@@ -45,20 +57,52 @@ public class IwcData extends AbstractJavaScriptExtension {
 				}
 			}
 		});
+
+		addFunction("listCallback", new JavaScriptFunction() {
+			@Override
+			public void call(JsonArray arguments) {
+				if (listCallback != null) {
+					// handle client-side response
+					listCallback.accept(arguments.toJson());
+				}
+			}
+		});
 	}
 
 	/**
-	 * Set the value of the data reference.
+	 * Stores the given value to the specified node.
 	 * 
-	 * @param data
-	 *            the value to set.
+	 * @param value
+	 *            the value to store in the node.
 	 */
-	public void set(String data) {
-		callFunction("set", data);
+	public void set(String value) {
+		callFunction("set", value);
 	}
 
 	/**
-	 * Gets the value of the data reference.
+	 * Gathers all nodes who's key matches the given partial-key.
+	 * <p>
+	 * The response from the client-side is sent back when the value becomes
+	 * available. To use this value on the server-side a callback has to be
+	 * registered via {{@link #registerBulkGetCallback(Consumer)} method.
+	 */
+	public void bulkGet() {
+		callFunction("bulkGet");
+	}
+
+	/**
+	 * Registers a callback that accepts the value from the call to the
+	 * {{@link #bulkGet()} method.
+	 * 
+	 * @param callback
+	 *            the method to execute when the value becomes available.
+	 */
+	public void registerBulkGetCallback(Consumer<String> callback) {
+		this.bulkGetCallback = callback;
+	}
+
+	/**
+	 * Gathers the node with the specific key.
 	 * <p>
 	 * The response from the client-side is sent back when the value becomes
 	 * available. To use this value on the server-side a callback has to be
@@ -69,35 +113,73 @@ public class IwcData extends AbstractJavaScriptExtension {
 	}
 
 	/**
-	 * Registers a callback that accepts the value from the call to the {{@link #get()} method.
+	 * Registers a callback that accepts the value from the call to the
+	 * {{@link #get()} method.
 	 * 
-	 * @param callback the method to execute when the value becomes available.
+	 * @param callback
+	 *            the method to execute when the value becomes available.
 	 */
 	public void registerGetCallback(Consumer<String> callback) {
 		this.getCallback = callback;
 	}
 
 	/**
-	 * Adds a watch on the data reference.
+	 * Gathers the node with the specific key and calls the registered callback
+	 * on updates to the node.
+	 * <p>
+	 * The response from the client-side is sent back when the value becomes
+	 * available. To use this value on the server-side a callback has to be
+	 * registered via {{@link #registerWatchCallback(Consumer)} method.
 	 */
 	public void watch() {
 		callFunction("watch");
 	}
-	
+
 	/**
-	 * Registers a callback that accepts the value from the call to the {{@link #watch()} method.
+	 * Registers a callback that accepts the value from the call to the
+	 * {{@link #watch()} method.
 	 * 
-	 * @param callback the method to execute when the value becomes available.
+	 * @param callback
+	 *            the method to execute when the value becomes available.
 	 */
 	public void registerWatchCallback(Consumer<String> callback) {
 		this.watchCallback = callback;
-	}	
+	}
 
 	/**
-	 * Adds a watch on the data reference.
+	 * Gathers all node keys who match the given partial-key.
+	 * <p>
+	 * The response from the client-side is sent back when the value becomes
+	 * available. To use this value on the server-side a callback has to be
+	 * registered via {{@link #registerListCallback(Consumer)} method.
+	 */
+	public void list() {
+		callFunction("list");
+	}
+
+	/**
+	 * Registers a callback that accepts the value from the call to the
+	 * {{@link #list()} method.
+	 * 
+	 * @param callback
+	 *            the method to execute when the value becomes available.
+	 */
+	public void registerListCallback(Consumer<String> callback) {
+		this.listCallback = callback;
+	}
+
+	/**
+	 * Unregisters the callback for the node.
 	 */
 	public void unwatch() {
 		callFunction("unwatch");
+	}
+	
+	/**
+	 * Deletes the node with the specific key.
+	 */
+	public void delete() {
+		callFunction("delete");
 	}
 
 	/**

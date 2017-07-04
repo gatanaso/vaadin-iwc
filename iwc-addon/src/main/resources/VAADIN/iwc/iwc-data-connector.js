@@ -18,9 +18,9 @@ window.org_vaadin_iwc_IwcData = function() {
   };
 
   /**
-	 * Set the value of the data reference.
+	 * Stores the given value to the specified node.
 	 *
-	 * @param data the value to set.
+	 * @param data the value to store in the node.
 	 */
   this.set = function(data) {
     console.log("Setting data reference value: " + data);
@@ -30,7 +30,7 @@ window.org_vaadin_iwc_IwcData = function() {
   };
 
   /**
-	 * Gets the value of the data reference.
+	 * Gathers the node with the specific key.
 	 */
   this.get = function() {
     dataRef.get().then(function(data) {
@@ -44,6 +44,32 @@ window.org_vaadin_iwc_IwcData = function() {
     });
   };
 
+  /**
+   * Gathers all nodes who's key matches the given partial-key.
+   */
+  this.bulkGet = function() {
+    dataRef.bulkGet().then(function(values) {
+      // execute server callback
+      connector.bulkGetCallback(values);
+
+        console.log(JSON.stringify(values, null, 2));
+        printInfoMessageToUI(values);
+    });
+  };
+
+  /**
+   * Gathers all node keys who match the given partial-key.
+   */
+  this.list = function() {
+    dataRef.list().then(function(paths) {
+      // execute server callback
+      connector.listCallback(paths);
+
+      console.log(paths);
+      printInfoMessageToUI(paths);
+    });
+  };
+
   // watch data values
   var _watchData = {
     src: null,
@@ -51,7 +77,7 @@ window.org_vaadin_iwc_IwcData = function() {
   };
 
   /**
-   * Adds a watch on the data reference.
+   * Gathers the node with the specific key and calls the registered callback on updates to the node.
    */
   this.watch = function() {
     console.log("adding a watch on the data reference");
@@ -62,11 +88,19 @@ window.org_vaadin_iwc_IwcData = function() {
   };
 
   /**
-   * Removes the watch on the data reference.
+   * Unregisters the callback for the node.
    */
   this.unwatch = function() {
-    console.log("removing the watch on the data reference");
+    console.log("Removing the watch on the data reference");
     dataRef.unwatch(_watchData);
+  };
+
+  /**
+   * Deletes the node with the specific key.
+   */
+  this.delete = function() {
+    console.log("Deleting data reference");
+    dataRef.delete();
   };
 
   var onChange = function(change, done) {

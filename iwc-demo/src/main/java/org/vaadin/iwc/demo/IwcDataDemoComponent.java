@@ -20,33 +20,38 @@ public class IwcDataDemoComponent extends VerticalLayout {
 
 	private static final String DATA_PATH = "/vaadin/iwc/data";
 	private static final String DATA_VALUE_LABEL_CLASS = "data-reference-value";
-	
+
 	public IwcDataDemoComponent() {
 
 		IwcData iwcData = new IwcData();
 		iwcData.setPath(DATA_PATH);
 		iwcData.registerGetCallback(this::getCallback);
+		iwcData.registerBulkGetCallback(this::bulkGetCallback);
 		iwcData.registerWatchCallback(this::watchCallback);
+		iwcData.registerListCallback(this::listCallback);
 		addExtension(iwcData);
 
 		Button watch = new Button("watch");
 		watch.addClickListener(event -> iwcData.watch());
 
-		Button unwatch = new Button("unwatch");
-		unwatch.addClickListener(event -> iwcData.unwatch());
+		Button list = new Button("list");
+		list.addClickListener(event -> iwcData.list());
 
 		TextField dataInput = new TextField();
 		Button setDataBtn = new Button("set");
 		setDataBtn.addClickListener(event -> iwcData.set(dataInput.getValue()));
-		HorizontalLayout setAction = new HorizontalLayout(dataInput, setDataBtn);
-		setAction.setSpacing(true);
+		HorizontalLayout set = new HorizontalLayout(dataInput, setDataBtn);
+		set.setSpacing(true);
 
-		Button getData = new Button("get");
-		getData.addClickListener(event -> iwcData.get());
+		Button bulkGet = new Button("bulk get");
+		bulkGet.addClickListener(event -> iwcData.bulkGet());
 
-		HorizontalLayout dataApiActions = new HorizontalLayout(watch, unwatch, setAction, getData);
+		Button get = new Button("get");
+		get.addClickListener(event -> iwcData.get());
+
+		HorizontalLayout dataApiActions = new HorizontalLayout(watch, set, get, bulkGet, list);
 		dataApiActions.setSpacing(true);
-		
+
 		Label infoLbl = new Label();
 		infoLbl.setContentMode(ContentMode.PREFORMATTED);
 		infoLbl.addStyleName(DATA_VALUE_LABEL_CLASS);
@@ -56,12 +61,20 @@ public class IwcDataDemoComponent extends VerticalLayout {
 		addComponents(dataReference, dataApiActions, infoLbl);
 		setSpacing(true);
 	}
-	
+
 	private void getCallback(String value) {
 		System.out.println("get() method return value: " + value);
 	}
-	
+
+	private void bulkGetCallback(String value) {
+		System.out.println("bulkGet() method return value: " + value);
+	}
+
 	private void watchCallback(String value) {
 		System.out.println("watch() method return value: " + value);
+	}
+
+	private void listCallback(String value) {
+		System.out.println("list() method return value: " + value);
 	}
 }
