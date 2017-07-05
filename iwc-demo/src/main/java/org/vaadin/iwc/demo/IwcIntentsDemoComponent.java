@@ -55,6 +55,7 @@ public class IwcIntentsDemoComponent extends VerticalLayout {
 
 		addComponents(intentsReference, dataApiActions, infoLbl);
 		setSpacing(true);
+		setMargin(false);
 	}
 	
 	private void getCallback(String value) {

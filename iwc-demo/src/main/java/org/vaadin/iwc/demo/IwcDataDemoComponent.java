@@ -60,6 +60,7 @@ public class IwcDataDemoComponent extends VerticalLayout {
 		Label dataReference = new Label("Data reference path: " + DATA_PATH);
 		addComponents(dataReference, dataApiActions, infoLbl);
 		setSpacing(true);
+		setMargin(false);
 	}
 
 	private void getCallback(String value) {

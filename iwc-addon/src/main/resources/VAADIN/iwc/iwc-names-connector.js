@@ -1,43 +1,31 @@
 'use strict';
 /**
- * Iwc Data connector.
+ * Iwc Names connector.
  */
-window.org_vaadin_iwc_IwcData = function() {
+window.org_vaadin_iwc_IwcNames = function() {
 
   var connector = this;
   var iwc = new ozpIwc.Client("https://ozoneplatform.github.io/ozp-iwc");
-  var dataRef;
+  var namesRef;
 
   // Handle changes from the server-side
   this.onStateChange = function() {
-    var dateRefeferenceEndpoint = this.getState().path;
-    if (dateRefeferenceEndpoint) {
-      console.log('Path set from server: ', dateRefeferenceEndpoint);
-      dataRef = new iwc.data.Reference(dateRefeferenceEndpoint, {fullResponse: true});
+    var namesRefEndpoint = this.getState().path;
+    if (namesRefEndpoint) {
+      console.log('Path set from server: ', namesRefEndpoint);
+      namesRef = new iwc.names.Reference(namesRefEndpoint, {fullResponse: true});
     }
   };
 
   /**
-	 * Stores the given value to the specified node.
-	 *
-	 * @param data the value to store in the node.
-	 */
-  this.set = function(data) {
-    console.log("Setting data reference value: " + data);
-    dataRef.set(data).catch(function(err) {
-      console.error("Error occurred while setting data value: ", err);
-    });
-  };
-
-  /**
-	 * Gathers the node with the specific key.
+	 * Gets the value of the names reference.
 	 */
   this.get = function() {
-    dataRef.get().then(function(data) {
+    namesRef.get().then(function(data) {
       // execute server callback
       connector.getCallback(data);
 
-      console.log("Data reference value: ", data);
+      console.log("Names reference value: ", data);
       printInfoMessageToUI(data);
     }).catch(function(err) {
       console.error("Could not retrieve data reference value. Reason: ", err);
@@ -48,7 +36,7 @@ window.org_vaadin_iwc_IwcData = function() {
    * Gathers all nodes who's key matches the given partial-key.
    */
   this.bulkGet = function() {
-    dataRef.bulkGet().then(function(values) {
+    namesRef.bulkGet().then(function(values) {
       // execute server callback
       connector.bulkGetCallback(values);
 
@@ -61,7 +49,7 @@ window.org_vaadin_iwc_IwcData = function() {
    * Gathers all node keys who match the given partial-key.
    */
   this.list = function() {
-    dataRef.list().then(function(paths) {
+    namesRef.list().then(function(paths) {
       // execute server callback
       connector.listCallback(paths);
 
@@ -77,30 +65,22 @@ window.org_vaadin_iwc_IwcData = function() {
   };
 
   /**
-   * Gathers the node with the specific key and calls the registered callback on updates to the node.
+   * Adds a watch on the data reference.
    */
   this.watch = function() {
     console.log("adding a watch on the data reference");
-    dataRef.watch(onChange).then(function(response) {
+    namesRef.watch(onChange).then(function(response) {
       _watchData.src = response.dst;
       _watchData.msgId = response.replyTo;
     });
   };
 
   /**
-   * Unregisters the callback for the node.
+   * Removes the watch on the data reference.
    */
   this.unwatch = function() {
-    console.log("Removing the watch on the data reference");
-    dataRef.unwatch(_watchData);
-  };
-
-  /**
-   * Deletes the node with the specific key.
-   */
-  this.delete = function() {
-    console.log("Deleting data reference");
-    dataRef.delete();
+    console.log("removing the watch on the data reference");
+    namesRef.unwatch(_watchData);
   };
 
   var onChange = function(change, done) {
@@ -117,7 +97,7 @@ window.org_vaadin_iwc_IwcData = function() {
   };
 
   var printInfoMessageToUI = function(data) {
-    var dataLabel = document.getElementsByClassName("data-reference-value")[0];
+    var dataLabel = document.getElementsByClassName("names-reference-value")[0];
     dataLabel.textContent = JSON.stringify(data, null, 2);
   }
 }

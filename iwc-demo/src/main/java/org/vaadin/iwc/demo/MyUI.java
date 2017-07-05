@@ -24,7 +24,13 @@ public class MyUI extends UI {
 		IwcDataDemoComponent iwcData = new IwcDataDemoComponent();
 		IwcIntentsDemoComponent iwcIntents = new IwcIntentsDemoComponent();
 
-		VerticalLayout content = new VerticalLayout(iwcData, iwcIntents);
+		IwcNamesDemoComponent iwcNamesApi = new IwcNamesDemoComponent("/api", false);
+		IwcNamesDemoComponent iwcNamesAddress = new IwcNamesDemoComponent("/address", false);
+		IwcNamesDemoComponent iwcNamesMutlicast = new IwcNamesDemoComponent("/multicast", false);
+		IwcNamesDemoComponent iwcNamesRouter = new IwcNamesDemoComponent("/router", true);
+
+		VerticalLayout content = new VerticalLayout(iwcData, iwcIntents, iwcNamesApi, iwcNamesAddress,
+				iwcNamesMutlicast, iwcNamesRouter);
 		content.setSpacing(true);
 		setContent(content);
 	}
